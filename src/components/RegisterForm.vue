@@ -1,13 +1,36 @@
 <template>
-  <form @submit.prevent="handleRegister">
-    <h2>Register</h2>
-    <input v-model="name" placeholder="Name" required />
-    <input v-model="email" type="email" placeholder="Email" required />
-    <input v-model="password" type="password" placeholder="Password" required />
-    <input v-model="passwordConfirmation" type="password" placeholder="Confirm Password" required />
-    <button type="submit">Register</button>
-    <p>Sudah punya akun? <router-link to="/login">Login</router-link></p>
-  </form>
+    <div class="form-card">
+      <!-- Logo dan Judul -->
+      <div class="card-header">
+        <img src="/img/logo_taskula.png" alt="Logo" class="logo" />
+        <h2 class="form-title">REGISTER</h2>
+      </div>
+
+      <!-- Form -->
+      <form @submit.prevent="handleRegister" class="register-form">
+        <div class="input-group">
+          <span class="icon">👤</span>
+          <input v-model="name" type="text" placeholder="Username" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon">📧</span>
+          <input v-model="email" type="email" placeholder="Email" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon">🔒</span>
+          <input v-model="password" type="password" placeholder="Password" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon">🔒</span>
+          <input v-model="passwordConfirmation" type="password" placeholder="Confirm Password" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Register</button>
+      </form>
+    </div>
 </template>
 
 <script setup>
@@ -18,7 +41,7 @@ import { useRouter } from 'vue-router'
 const name = ref('')
 const email = ref('')
 const password = ref('')
-const passwordConfirmation = ref('') // <--- TAMBAHIN INI UNTUK V-MODEL FIELD BARU
+const passwordConfirmation = ref('')
 const router = useRouter()
 
 const handleRegister = async () => {
@@ -27,51 +50,106 @@ const handleRegister = async () => {
       name: name.value,
       email: email.value,
       password: password.value,
-      password_confirmation: passwordConfirmation.value, // <--- KIRIM INI JUGA KE BACKEND!
+      password_confirmation: passwordConfirmation.value,
     })
-    alert('Registrasi berhasil! Silakan login.') // Tambah alert biar tau berhasil
+    alert('Registrasi berhasil! Silakan login.')
     router.push('/login')
   } catch (error) {
-    // Kalau ada error validasi dari Laravel, biasanya dia kirim di error.response.data.errors
     alert(error.response?.data?.message || 'Registrasi gagal')
-    // Lu bisa console.log error.response?.data?.errors buat lihat detail validasinya
-    console.error('Detail error validasi:', error.response?.data?.errors)
+    console.error('Detail error:', error.response?.data?.errors)
   }
 }
 </script>
 
 <style scoped>
-/* Tambahin style biar rapi, kalau belum ada. Sesuaikan dengan gaya lu */
-form {
+/* Agar semua padding dan border tidak membuat elemen melebar */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.form-card {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 100%;
   max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.form-title {
+  font-size: 35px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #113f67, #bfbed4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* fallback */
+}
+
+
+.register-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+
+.input-group {
+  position: relative;
+  width: 100%;
 }
-button {
-  padding: 10px 15px;
-  background-color: #007bff;
+
+.input-group .icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #2f3c7e;
+  font-size: 18px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 2px solid #2f3c7e; 
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  display: block;
+}
+
+
+.input-group input:focus {
+  border-color: #6c63ff;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #113f67;
   color: white;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-button:hover {
-  background-color: #0056b3;
-}
-p {
-  margin-top: 10px;
-  text-align: center;
+
+.submit-btn:hover {
+  background-color: #1b4b82;
 }
 </style>
